@@ -1,0 +1,154 @@
+import random
+from names import word_list
+
+def get_word():
+    word=random.choice(word_list)
+    return word.upper()
+
+def play(word):
+    word_completion="-"*len(word)
+    guessed= False
+    guessed_letters=[]
+    guessed_words=[]
+    word_as_list=[]
+    tries=6
+    print("let's play hangman!")
+    print(displayhangman(tries))
+    print(word_completion)
+    print("\n")
+    while not guessed and tries>0:
+        guess=input("enter your guess: ")
+        guess=guess.upper()
+        if len(guess)==1 and guess.isalpha():
+            if guess in guessed_letters:
+                print ("you have already guessed the letter ",guess)
+            elif guess not in word:
+                print(guess," is not in the word.")
+                tries-=1
+                guessed_letters.append(guess)
+            else:
+                print("Good job. ",guess ,"is in the word!")
+                guessed_letters.append(guess)
+                word_as_list=list(word_completion)
+                indices=[i for i,letter in enumerate(word) if letter==guess]
+                for index in indices:
+                    word_as_list[index]=guess
+                word_completion="".join(word_as_list)
+                if "-" not in word_completion:
+                    guessed=True
+        elif (len(guess)==len(word) and guess.isalpha()):
+            if guess in guessed_words:
+                print("you already guessed the word", guess)
+            elif guess!=word:
+                print(guess," is not the word.")
+                tries-=1
+                guessed_words.append(guess)
+            else:
+                guessed=True
+                word_completion=word
+        else:
+            print("not a valid guess")
+        displayhangman(tries)
+        print(word_completion)
+    if guessed:
+        print("congrats, you guessed the word! you win!")
+    else:
+        print("Sorry you ran out of tries. the word was ",word)
+
+def displayhangman(tries):
+    if tries==6:
+        print("""
+                 __________
+                 |     |
+                 |     | 
+                 |     O
+                 |      
+                 |
+                 |
+                 |
+               __|__   """)
+
+    elif tries==5:
+        print("""
+                 __________
+                 |     |
+                 |     | 
+                 |     O
+                 |     | 
+                 |
+                 |
+                 |
+               __|__   """)
+        
+    elif tries==4:
+        print("""
+                 __________
+                 |     |
+                 |     | 
+                 |     O
+                 |     |/ 
+                 |
+                 |
+                 |
+               __|__   """)
+
+    elif tries==3:
+        print("""
+                 __________
+                 |     |
+                 |     | 
+                 |     O
+                 |    \\|/ 
+                 |
+                 |
+                 |
+               __|__   """)
+
+
+
+    elif tries==2:
+        print("""
+                 __________
+                 |     |
+                 |     | 
+                 |     O
+                 |    \\|/ 
+                 |     |
+                 |    
+                 |
+               __|__   """)
+
+    elif tries==1:
+        print("""
+                 __________
+                 |     |
+                 |     | 
+                 |     O
+                 |    \\|/ 
+                 |     | 
+                 |    /
+                 |
+               __|__   """)
+        
+    elif tries==0:
+        print("""
+                 __________
+                 |     |
+                 |     | 
+                 |     O
+                 |    \\|/ 
+                 |     |
+                 |    / \\
+                 |
+               __|__   """)
+    
+
+def main():
+    word=get_word()
+    play(word)
+
+    while (input("want to play more?(y/n):").upper()=='Y'):
+        word=get_word()
+        play(word)
+
+main()
